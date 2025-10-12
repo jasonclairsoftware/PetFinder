@@ -50,10 +50,12 @@ The Project Scope will outline the overall features and behaviors that will be i
 <a id="related-documents-bookmark"></a>
 ### Related Documents
 - Jira: https://cst326fall2025.atlassian.net/jira/software/projects/PET/boards/34/backlog?atlOrigin=eyJpIjoiOWM5ZDNkMGRjNTc2NGNiZGFhNDBkM2E1NDQxMDkwNTMiLCJwIjoiaiJ9
+![Jira Sample](./Resources/Images/JiraSample.png)
+Sample Jira figure
 
 <a id="terms-acronyms-definitions-bookmark"></a>
 ### Terms/Acronyms and Definitions
-Here you can find all of the terms and acronyms that may not be common knowledge for those whom are not tanyard software developers.
+Here you can find all of the terms and acronyms that may not be common knowledge for those whom are not tanyard software developers. More terms will be added while the project is being developed.
 <table>
     <thead>
         <tr>
@@ -78,7 +80,7 @@ Here you can find all of the terms and acronyms that may not be common knowledge
 
 <a id="risks-and-assumptions-bookmark"></a>
 ### Risks and Assumptions
-With any project, there are risks and aspects that we must assume. Here I will outline the possible risks, the management and what we are going to assume during production.
+With any project, there are risks and aspects that we must assume. Here will be the possible risks, the management and what we are going to assume during production.
 
 - N/A
 
@@ -88,17 +90,25 @@ The system overview chapter will outline the technical aspects of the project. H
 
 <a id="data-flow-diagram-bookmark"></a>
 ### Data Flow Diagram
+The Data Flow Diagram or the N-Layer diagram will showcase the layers data will flow throughout the project
+![N-Layer Diagram](./Resources/Images/NLayer.png)
+N-Layer Figure
 
 <a id="flow-chart-bookmark"></a>
 ### Flow Charts
+TODO:: In Progress
 
 <a id="site-map-bookmark"></a>
 ### Site Maps
+The site map will outline the navigation and access to various locations the user can see.
+![Site Map](./Resources/Images/SiteMap.png)
+Site Map figure
 
 ## Functional Specifications
 
 <a id="functional-specifications-bookmark"></a>
 ### Functional Specifications
+The functional specificaitons will outline the more technical aspects of the project. It will showcase the wireframes, flow of data, use cases, UMLs, (Non)Functional Requirements and more.
 
 <a id="wireframes-bookamrk"></a>
 ### Wireframes
@@ -128,13 +138,41 @@ All users will have the ability to view the missing pet map. The user will eithe
 
 <a id="functional-requirments-bookmark"></a>
 ### Functional Requirements
+The functional requirements will outline the features and behavior that is expected for the project. This is how we know if we meet the requirements for the client.
+
+<!-- May need to be re-worked -->
+<table>
+    <thead>
+        <tr>
+            <th>User Story ID</th>
+            <th>ID</th>
+            <th>Functional Requirement</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>PET-1</td>
+            <td>1</td>
+            <td>The system will allow navigation with the use of the navigation bar</td>
+        </tr>
+                <tr>
+            <td>PET-1</td>
+            <td>1</td>
+            <td>The system will allow navigation with the use of the navigation bar</td>
+        </tr>
+    </tbody>
+</table>
 
 <a id="nonfunctional-requirments-bookmark"></a>
 ### Non-Functional Requirements
 
 <a id="open-issues-bookmark"></a>
 ## Open Issues
+This is the pending issues that need to be resolved for the overall project.
+- N/A
 
 <a id="references-bookmark"></a>
 ## References
+Any references that is needed for copywrite or sources are here.
+- N/A
 
