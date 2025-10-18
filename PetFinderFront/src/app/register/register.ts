@@ -24,7 +24,7 @@ export class Register {
 
       const loginData = this.registerForm.value;
 
-      this.http.post('https://your-backend-api.com/register', loginData)
+      this.http.post('https://localhost:8443/register', loginData)
         .subscribe({
           next: (response) => {
             console.log('Login successful', response);
