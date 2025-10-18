@@ -23,7 +23,7 @@ export class Register {
     if (this.registerForm.valid) {
 
       const loginData = this.registerForm.value;
-
+      console.log(loginData);
       this.http.post('https://localhost:8443/register', loginData)
         .subscribe({
           next: (response) => {

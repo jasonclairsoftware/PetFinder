@@ -1,6 +1,7 @@
 package dev.jcclair.PetFinderBack.controllers;
 
 import dev.jcclair.PetFinderBack.models.UserViewModel;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 public class RegisterController {
 
     @PostMapping
-    public String registerUser(@ModelAttribute UserViewModel userViewModel, Model model) {
-
-        return "";
+    public ResponseEntity registerUser(@RequestBody UserViewModel user) {
+        System.out.println(user);
+        //return ResponseEntity.ok("Registration success.");
+        return ResponseEntity.noContent().build();
     }
 
 }
