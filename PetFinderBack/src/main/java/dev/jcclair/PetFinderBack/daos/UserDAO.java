@@ -1,6 +1,11 @@
 package dev.jcclair.PetFinderBack.daos;
 
+import dev.jcclair.PetFinderBack.models.UserModel;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is data access for all user information
@@ -8,5 +13,7 @@ import org.springframework.stereotype.Repository;
  * @author Jason Clair
  */
 @Repository
-public class UserDAO {
+public interface UserDAO extends JpaRepository<UserModel, Long> {
+    List<UserModel> testUsers = new ArrayList<>();
+
 }

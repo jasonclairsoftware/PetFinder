@@ -30,7 +30,7 @@ public class UserModel {
     }
 
     /**
-     * Overlaoded CTOR - Will directly assign values.
+     * Overloaded CTOR - Will directly assign values.
      * @param id - PK for the user
      * @param email - Unique email for the user
      * @param hashedPassword - Hashed Password
