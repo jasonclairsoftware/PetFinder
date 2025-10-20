@@ -126,7 +126,7 @@ public class UserRegistrationService {
      */
     private int validatePassword(String password) {
         // Method scope properties
-        String PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}$";
+        String PASSWORD_REGEX = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9\\s]).{8,}$";
         Pattern passwordPattern = Pattern.compile(PASSWORD_REGEX);
 
         // Checking if the password is valid with regex
