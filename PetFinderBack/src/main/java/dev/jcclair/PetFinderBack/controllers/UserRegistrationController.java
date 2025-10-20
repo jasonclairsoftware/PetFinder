@@ -1,6 +1,8 @@
 package dev.jcclair.PetFinderBack.controllers;
 
 import dev.jcclair.PetFinderBack.models.UserViewModel;
+import dev.jcclair.PetFinderBack.services.UserRegistrationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,25 @@ import org.springframework.web.bind.annotation.*;
 public class UserRegistrationController {
 
     //-------------------------------------------------------------------
-    // START OF METHODS
+    // START OF PROPERTIES
+    //-------------------------------------------------------------------
+
+    private final UserRegistrationService userRegistrationService;
+
+    //-------------------------------------------------------------------
+    // END OF PROPERTIES - START OF CONSTRUCTORS
+    //-------------------------------------------------------------------
+
+    /**
+     * Overloaded CTOR used for Spring to autowire dependent properties.
+     * @param userRegistrationService - Service used to process user registrations
+     */
+    public UserRegistrationController(UserRegistrationService userRegistrationService) {
+        this.userRegistrationService = userRegistrationService;
+    }
+
+    //-------------------------------------------------------------------
+    // END OF CONSTRUCTORS - START OF METHODS
     //-------------------------------------------------------------------
 
     /**
@@ -25,11 +45,27 @@ public class UserRegistrationController {
      */
     @PostMapping
     public ResponseEntity registerUser(@RequestBody UserViewModel user) {
-        System.out.println(user);
-        //return ResponseEntity.ok("Registration success."); // Sample
+        // Method scope properties
+        int creationCode = 0;
 
-        // TODO:: Process request properly.
-        return ResponseEntity.noContent().build();
+        System.out.println(user); // Use logger later
+
+        // TODO:: Request User Creation
+        creationCode = userRegistrationService.createUserRequest(user);
+
+        switch(creationCode) {
+            case -1:
+                return new ResponseEntity<>("No email address provided", HttpStatus.BAD_REQUEST);
+            case -2:
+                return new ResponseEntity<>("Invalid email formatting", HttpStatus.BAD_REQUEST);
+            case -3:
+                return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
+            case -4:
+                return new ResponseEntity<>("Bad password criteria", HttpStatus.BAD_REQUEST);
+        }
+
+        // All negative cases passed. Registration complete
+        return ResponseEntity.ok("User Registration Successful");
     }
 
     //-------------------------------------------------------------------

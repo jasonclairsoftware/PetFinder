@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This is data access for all user information
@@ -16,4 +17,5 @@ import java.util.List;
 public interface UserDAO extends JpaRepository<UserModel, Long> {
     List<UserModel> testUsers = new ArrayList<>();
 
+    Optional<UserModel> findByEmail(String email);
 }

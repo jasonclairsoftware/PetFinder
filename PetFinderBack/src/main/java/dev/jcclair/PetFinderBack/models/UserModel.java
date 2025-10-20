@@ -1,15 +1,21 @@
 package dev.jcclair.PetFinderBack.models;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 /**
  * This is the main model for how information will be kept in the database excluding the password
  *
  * @author Jason Clair
  */
+@Entity
 public class UserModel {
 
     //-------------------------------------------------------------------
     // START OF PROPERTIES
     //-------------------------------------------------------------------
+    @Id
     private long id;
     private String email;
     private String hashedPassword; // When hashed, the plain text password will no longer be maintained
@@ -112,7 +118,26 @@ public class UserModel {
     }
 
     //-------------------------------------------------------------------
-    // END OF GETTERS AND SETTERS
+    // END OF GETTERS AND SETTERS - START OF METHODS
+    //-------------------------------------------------------------------
+
+    /**
+     * Standard toString Override
+     * @return - String describing the model
+     */
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", salt='" + salt + '\'' +
+                '}';
+    }
+
+
+    //-------------------------------------------------------------------
+    // END OF METHODS
     //-------------------------------------------------------------------
 
 
