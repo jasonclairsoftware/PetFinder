@@ -1,8 +1,7 @@
 package dev.jcclair.PetFinderBack.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 /**
  * This is the main model for how information will be kept in the database excluding the password
@@ -10,16 +9,19 @@ import jakarta.persistence.Id;
  * @author Jason Clair
  */
 @Entity
-public class UserModel {
+@Table(name = "users")
+public class UserEntity {
 
     //-------------------------------------------------------------------
     // START OF PROPERTIES
     //-------------------------------------------------------------------
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false, unique = true)
     private String email;
-    private String hashedPassword; // When hashed, the plain text password will no longer be maintained
-    private String salt;
+    @Column(name = "hashedpassword", nullable = false)
+    private String hashedPassword;
 
     //-------------------------------------------------------------------
     // END OF PROPERTIES - START OF CONSTRUCTORS
@@ -28,11 +30,10 @@ public class UserModel {
     /**
      * Default CTOR - Will initialize all to blank values.
      */
-    public UserModel() {
+    public UserEntity() {
         this.id = -1;
         this.email = "";
         this.hashedPassword = "";
-        this.salt = "";
     }
 
     /**
@@ -42,11 +43,10 @@ public class UserModel {
      * @param hashedPassword - Hashed Password
      * @param salt - Salt for password.
      */
-    public UserModel(long id, String email, String hashedPassword, String salt) {
+    public UserEntity(long id, String email, String hashedPassword) {
         this.id = id;
         this.email = email;
         this.hashedPassword = hashedPassword;
-        this.salt = salt;
     }
 
     //-------------------------------------------------------------------
@@ -101,21 +101,6 @@ public class UserModel {
         this.hashedPassword = hashedPassword;
     }
 
-    /**
-     * Will retrieve the password salt for the User Entity
-     * @return - The User Entity password salt
-     */
-    public String getSalt() {
-        return salt;
-    }
-
-    /**
-     * Will set the password salt for the User Entity
-     * @param salt - The password salt to be assigned
-     */
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
 
     //-------------------------------------------------------------------
     // END OF GETTERS AND SETTERS - START OF METHODS
@@ -131,11 +116,8 @@ public class UserModel {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", hashedPassword='" + hashedPassword + '\'' +
-                ", salt='" + salt + '\'' +
                 '}';
     }
-
-
     //-------------------------------------------------------------------
     // END OF METHODS
     //-------------------------------------------------------------------

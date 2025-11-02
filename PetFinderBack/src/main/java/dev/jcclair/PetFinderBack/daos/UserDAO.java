@@ -1,6 +1,6 @@
 package dev.jcclair.PetFinderBack.daos;
 
-import dev.jcclair.PetFinderBack.models.UserModel;
+import dev.jcclair.PetFinderBack.models.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,8 +14,7 @@ import java.util.Optional;
  * @author Jason Clair
  */
 @Repository
-public interface UserDAO extends JpaRepository<UserModel, Long> {
-    List<UserModel> testUsers = new ArrayList<>();
+public interface UserDAO extends JpaRepository<UserEntity, Long> {
 
-    Optional<UserModel> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 }

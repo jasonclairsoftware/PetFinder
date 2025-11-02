@@ -2,7 +2,10 @@ package dev.jcclair.PetFinderBack.controllers;
 
 import dev.jcclair.PetFinderBack.models.UserViewModel;
 import dev.jcclair.PetFinderBack.services.UserRegistrationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * @author Jason Clair
  */
 @RestController
-@RequestMapping("/register")
+@RequestMapping("/users")
 public class UserRegistrationController {
 
     //-------------------------------------------------------------------
@@ -20,6 +23,7 @@ public class UserRegistrationController {
     //-------------------------------------------------------------------
 
     private final UserRegistrationService userRegistrationService;
+    private static final Logger log = LoggerFactory.getLogger(UserRegistrationController.class);
 
     //-------------------------------------------------------------------
     // END OF PROPERTIES - START OF CONSTRUCTORS
@@ -42,33 +46,51 @@ public class UserRegistrationController {
      * @param user - The Users view model that will be validated for a new user.
      * @return - Will respond to registration request with success or failure codes
      */
-    @PostMapping
-    public ResponseEntity registerUser(@RequestBody UserViewModel user) {
-        // Method scope properties
-        int creationCode = 0;
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody UserViewModel user) {
 
-        System.out.println(user); // Use logger later
-
-        // TODO:: Request User Creation
-        creationCode = userRegistrationService.createUserRequest(user);
-
-        switch(creationCode) {
-            case -1:
-                return new ResponseEntity<>("No email address provided", HttpStatus.BAD_REQUEST);
-            case -2:
-                return new ResponseEntity<>("Invalid email formatting", HttpStatus.BAD_REQUEST);
-            case -3:
-                return new ResponseEntity<>("Email already exists", HttpStatus.BAD_REQUEST);
-            case -4:
-                return new ResponseEntity<>("Bad password criteria", HttpStatus.BAD_REQUEST);
+        // Validate if there is an email
+        if(user == null) {
+            log.warn("Attempted user registration failed. User is null");
+            return new ResponseEntity<>("There must be a user passed.", HttpStatus.BAD_REQUEST);
+        }
+        // Validate email resistance
+        if(user.getEmail().isBlank()){
+            log.warn("Attempted user registration failed. Email is blank");
+            return new ResponseEntity<>("No email", HttpStatus.BAD_REQUEST);
+        }
+        // Validate if email is valid
+        if(!this.userRegistrationService.validateEmail(user.getEmail())) {
+            log.warn("Attempted user registration failed. Incorrect email format" + user.getEmail());
+            return new ResponseEntity<>("Invalid email format", HttpStatus.BAD_REQUEST);
+        }
+        // Validate password existence
+        if(user.getPassword().isBlank()) {
+            log.warn("Attempted user registration failed. Password field is blank");
+            return new ResponseEntity<>("No password", HttpStatus.BAD_REQUEST);
+        }
+        // Validate strong password
+        if(!this.userRegistrationService.validatePassword(user.getPassword())) {
+            log.warn("Attempted user registration failed. Password is weak" + user.getPassword());
+            return new ResponseEntity<>("Invalid password strength", HttpStatus.BAD_REQUEST);
         }
 
+        // Fields good, routing service request
+        user = this.userRegistrationService.registerUserRequest(user);
+
         // All negative cases passed. Registration complete
-        return ResponseEntity.ok("User Registration Successful");
-    }
+        if(user != null) {
+            log.info("User registration success. " + user.getEmail() + " has been registered");
+            return ResponseEntity.ok("User Registration Successful");
+        }
+        else {
+            log.warn("Attempted user registration failed. Unknown Error");
+            return new ResponseEntity<>("Unknown error registering", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    } // End of registerUser method
 
     //-------------------------------------------------------------------
-    // END OF PROPERTIES
+    // END OF METHODS
     //-------------------------------------------------------------------
 
 }
