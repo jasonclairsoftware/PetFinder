@@ -1,11 +1,11 @@
 package dev.jcclair.PetFinderBack.controllers;
 
 import dev.jcclair.PetFinderBack.models.UserViewModel;
-import dev.jcclair.PetFinderBack.services.UserRegistrationService;
+import dev.jcclair.PetFinderBack.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/users")
-public class UserRegistrationController {
+public class UserController {
 
     //-------------------------------------------------------------------
     // START OF PROPERTIES
     //-------------------------------------------------------------------
 
-    private final UserRegistrationService userRegistrationService;
-    private static final Logger log = LoggerFactory.getLogger(UserRegistrationController.class);
+    private final UserService userRegistrationService;
+    private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     //-------------------------------------------------------------------
     // END OF PROPERTIES - START OF CONSTRUCTORS
@@ -33,7 +33,7 @@ public class UserRegistrationController {
      * Overloaded CTOR used for Spring to autowire dependent properties.
      * @param userRegistrationService - Service used to process user registrations
      */
-    public UserRegistrationController(UserRegistrationService userRegistrationService) {
+    public UserController(UserService userRegistrationService) {
         this.userRegistrationService = userRegistrationService;
     }
 
@@ -49,6 +49,7 @@ public class UserRegistrationController {
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserViewModel user) {
 
+
         // Validate if there is an email
         if(user == null) {
             log.warn("Attempted user registration failed. User is null");
@@ -63,6 +64,11 @@ public class UserRegistrationController {
         if(!this.userRegistrationService.validateEmail(user.getEmail())) {
             log.warn("Attempted user registration failed. Incorrect email format" + user.getEmail());
             return new ResponseEntity<>("Invalid email format", HttpStatus.BAD_REQUEST);
+        }
+        // Validate if email existences
+        if(this.userRegistrationService.findUserByEmail(user.getEmail()) != null){
+            log.warn("Attempted user registration failed. User email already exsists");
+            return new ResponseEntity<>("Email already exsists", HttpStatus.BAD_REQUEST);
         }
         // Validate password existence
         if(user.getPassword().isBlank()) {
@@ -87,7 +93,17 @@ public class UserRegistrationController {
             log.warn("Attempted user registration failed. Unknown Error");
             return new ResponseEntity<>("Unknown error registering", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return null;
     } // End of registerUser method
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/users/loginForm";
+    }
+
+
 
     //-------------------------------------------------------------------
     // END OF METHODS

@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.6</version>
+		<version>3.5.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>dev.jcclair</groupId>
-	<artifactId>PetFinderBack</artifactId>
+	<artifactId>PetFinderTest</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>PetFinderBack</name>
-	<description>Demonstration for the backend for the Pet Finder Application</description>
+	<name>PetFinderTest</name>
+	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -30,16 +30,16 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>jakarta.platform</groupId>
@@ -72,7 +72,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>2.0.17</version>
         </dependency>
-
 	</dependencies>
 
 	<build>

@@ -1,9 +1,6 @@
-export class UserModel {
-    public username: string;
-    public password: string;
+export interface UserModel {
+    email: string;
+    password: string;
 
-    public constructor(username: string, password: string) {
-        this.username = username;
-        this.password = password;
-    }
+
 }

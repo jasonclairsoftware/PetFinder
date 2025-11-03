@@ -1,12 +1,13 @@
 package dev.jcclair.PetFinderBack.security;
 
 import jakarta.ws.rs.HttpMethod;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -17,17 +18,25 @@ import org.springframework.web.cors.CorsConfigurationSource;
  * @author Jason Clair
  */
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
-    private final CorsConfigurationSource corsConfigurationSource; // Inject your CORS bean
+    private final CorsConfigurationSource corsConfigurationSource;
+    private UserDetailsService userDetailsService;
+    private PasswordEncoder passwordEncoder;
 
     /**
      * Overloaded CTOR used to handle traffic security
      *
      * @param corsConfigurationSource - CORS security authentication
      */
-    public SecurityConfig(CorsConfigurationSource corsConfigurationSource) {
+    public SecurityConfig(
+            CorsConfigurationSource corsConfigurationSource,
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
         this.corsConfigurationSource = corsConfigurationSource;
+        this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -43,22 +52,35 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/register").permitAll()
-                //.anyRequest().authenticated()
+                .requestMatchers(HttpMethod.OPTIONS, "/**", "/users/register/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users/login").permitAll().anyRequest().authenticated()
+                )
+                .formLogin(loginForm ->
+                        loginForm
+                                .loginProcessingUrl("/users/login")
+                                .permitAll()
+                )
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/index")
+                                .permitAll()
                 );
 
         return http.build();
     }
 
+    /*
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+     */
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
+
+
 }

@@ -3,7 +3,6 @@ package dev.jcclair.PetFinderBack.services;
 import dev.jcclair.PetFinderBack.daos.UserDAO;
 import dev.jcclair.PetFinderBack.models.UserEntity;
 import dev.jcclair.PetFinderBack.models.UserViewModel;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import java.util.regex.Pattern;
  * @author Jason Clair
  */
 @Service
-public class UserRegistrationService {
+public class UserService {
 
     @Autowired
     private UserDAO userDAO;
@@ -31,7 +30,7 @@ public class UserRegistrationService {
     /**
      * No args CTOR. Used for Spring annotations
      */
-    public UserRegistrationService(UserDAO userDAO, PasswordEncoder passwordEncoder) {
+    public UserService(UserDAO userDAO, PasswordEncoder passwordEncoder) {
 
         this.userDAO = userDAO;
         this.passwordEncoder = passwordEncoder;

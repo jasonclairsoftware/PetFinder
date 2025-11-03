@@ -21,7 +21,7 @@ public class UserEntity {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(name = "hashedpassword", nullable = false)
-    private String hashedPassword;
+    private String Password;
 
     //-------------------------------------------------------------------
     // END OF PROPERTIES - START OF CONSTRUCTORS

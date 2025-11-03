@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { Userservice } from '../services/userservice';
 
 @Component({
   selector: 'app-register',
@@ -11,32 +13,30 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class Register {
   registerForm: FormGroup;
+  isError: boolean = false;
+  errorMessage: String = "";
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router, private userService: Userservice) {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.registerForm.valid) {
 
-      const loginData = this.registerForm.value;
-      console.log(loginData);
-      this.http.post('https://localhost:8443/register', loginData)
-        .subscribe({
-          next: (response) => {
-            console.log('Login successful', response);
-            // TODO: Handle successful login (e.g., store token, redirect)
-          },
-          error: (error) => {
-            console.error('Login failed', error);
-            // TODO: Handle error (e.g., show error message)
-          }
-        });
+      const registerData = this.registerForm.value;
+      let result: String;
+      console.log("Test" + registerData);
 
-      console.log('Form submitted:', this.registerForm.value);
+      result = await this.userService.registerUser(registerData);
+
+      console.log(result); // cant get error message
+
+      if(result == "User Registration Successful") {
+        this.router.navigate(["/login"]);
+      } 
     }
   }
 }
