@@ -1,43 +1,44 @@
 package dev.jcclair.PetFinderTest.services;
 
 import dev.jcclair.PetFinderTest.daos.PetDao;
+import dev.jcclair.PetFinderTest.daos.UserDao;
 import dev.jcclair.PetFinderTest.models.PetEntity;
 import dev.jcclair.PetFinderTest.models.PetModel;
+import dev.jcclair.PetFinderTest.models.UserEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class PetService {
 
     private PetDao petDao;
+    private UserDao userDao;
 
-    List<PetEntity> pets = new ArrayList<>(Arrays.asList(new PetEntity(1, "fluffy"), new PetEntity(2, "Neko"), new PetEntity(3, "Bowser")));
-
-    public PetService(PetDao petDao) {
+    public PetService(PetDao petDao, UserDao userDao) {
         this.petDao = petDao;
+        this.userDao = userDao;
     }
 
-    public PetModel getPetById(long id) {
-        Optional<PetEntity> pet = this.petDao.findById(id);
 
-        return pet.map(this::petEntityToPetModel).orElse(null);
+    public PetModel registerPet(PetModel pet) {
+        PetEntity savedPet = this.petDao.save(this.petModelToPetEntity(pet));
+        return this.petEntityToPetModel(savedPet);
     }
 
-    public List<PetModel> getPetsByUserId(long id) {
-        return null;
-    }
+    private PetEntity petModelToPetEntity(PetModel pet) {
+        // Get associated user
+        Optional<UserEntity> user = this.userDao.findById(pet.getOwnerId());
 
-    public PetModel addPet(PetModel pet) {
-        PetEntity entry = new PetEntity(pet.getId(), pet.getName());
-        entry = this.petDao.save(entry);
-        return this.petEntityToPetModel(entry);
+        // See if user is there
+        if(user.isEmpty()) return null;
+
+        // Return the saved pet
+        return new PetEntity(pet.getId(), user.get(), pet.getName(), pet.getBreed(), pet.getImageUrl());
     }
 
     private PetModel petEntityToPetModel(PetEntity pet) {
-        return new PetModel(pet.getId(), pet.getName());
+        return new PetModel(pet.getId(), pet.getUserEntity().getId(), pet.getName(), pet.getBreed(), pet.getImageUrl());
     }
 }

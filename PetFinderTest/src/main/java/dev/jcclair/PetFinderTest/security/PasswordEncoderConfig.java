@@ -1,4 +1,4 @@
-package dev.jcclair.PetFinderTest.configs;
+package dev.jcclair.PetFinderTest.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -42,9 +42,9 @@ public class UserService {
 
     public UserModel findUserByEmail(String email) {
         if(email.isBlank()) return null;
-        Optional<UserEntity> result = this.userDao.findByEmail(email);
+        UserEntity result = this.userDao.findByEmail(email);
 
-        return result.isPresent() ? this.userEntityToUserViewModel(result.get()) : null;
+        return result != null ? this.userEntityToUserViewModel(result) : null;
 
     }
 
@@ -75,7 +75,7 @@ public class UserService {
         return this.userEntityToUserViewModel(userEntity);
     }
 
-    public boolean autherizeUser(UserModel user) {
+    public boolean authorizeUser(UserModel user) {
         UserModel selectedUser = this.findUserByEmail(user.getEmail());
         if(selectedUser == null) return false;
         return this.passwordEncoder.matches(user.getPassword(), selectedUser.getPassword());
@@ -83,5 +83,11 @@ public class UserService {
 
     private UserModel userEntityToUserViewModel(UserEntity user) {
         return user == null ? null : new UserModel(user.getEmail(), user.getPassword());
+    }
+
+    public UserModel findUserById(long ownerId) {
+        Optional<UserEntity> user = this.userDao.findById(ownerId);
+
+        return user.isPresent() ? this.userEntityToUserViewModel(user.get()) : null;
     }
 }

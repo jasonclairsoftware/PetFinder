@@ -1,43 +1,43 @@
-import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Userservice } from '../services/userservice';
+import { UserModel } from '../models/user-model';
+import { CommonModule } from '@angular/common';
+import { Authservice } from '../services/authservice';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class Login {
   loginForm: FormGroup;
-  isError: boolean = false;
-  errorMessage: String = "";
+  error: string = '';
 
-  constructor(private fb: FormBuilder, private userservice: Userservice, private http: HttpClient, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: Authservice, private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required]]
     });
-
   }
 
-  async onSubmit() {
-    if (this.loginForm.valid) {
-      const loginData = this.loginForm.value;
-      let result: String;
-      console.log("Test" + loginData);
-
-      result = await this.userservice.login(loginData);
-
-      console.log(result); // cant get error message
-
-      if (result == "User login Successful") {
-        this.router.navigate(["/"]);
-        console.log("Login Successful");
+onSubmit() {
+  if (this.loginForm.valid) {
+    // Component calls the service. The service handles the token saving internally.
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        // We only handle navigation after a successful login
+        console.log("Login successful. Token saved by AuthService.");
+        this.router.navigate(['/']); 
+      },
+      error: (err) => {
+        // Handle and display error messages
+        this.error = 'Login failed. Check username and/or password';
+        console.error(err);
       }
-    }
+    });
   }
+}
 
 }

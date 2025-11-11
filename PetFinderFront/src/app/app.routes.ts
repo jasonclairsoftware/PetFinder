@@ -5,6 +5,8 @@ import { Register } from './register/register';
 import { Store } from './store/store';
 import { Checkout } from './checkout/checkout';
 import { Map } from './map/map';
+import { Cart } from './cart/cart';
+import { Registerpet } from './registerpet/registerpet';
 
 export const routes: Routes = [
     { path: '', component:Home},
@@ -12,5 +14,7 @@ export const routes: Routes = [
     { path: 'register', component: Register},
     { path: 'store', component: Store},
     { path: 'checkout', component: Checkout},
-    { path: 'map', component: Map}
+    { path: 'map', component: Map},
+    { path: 'cart', component: Cart },
+    { path: 'registerpet', component: Registerpet}
 ];

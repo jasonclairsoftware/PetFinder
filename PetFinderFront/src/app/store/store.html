@@ -1,10 +1,13 @@
-<ul>
+<div id="catalog-container">
   @for (product of products; track product.id) {
-    <li>{{ product.name }}</li>
-    <button (click)="addToCart(product)">Add to Cart</button>
+  <div class="card" style="width: 18rem;">
+    <img [src]="product.imageUrl" class="card-img-top" alt="{{product.name}}">
+    <div class="card-body">
+      <h5 class="card-title">{{product.name}}</h5>
+      <p class="card-text">{{product.description}}</p>
+      <button class="btn btn-primary" (click)="addToCart(product)">Add to Cart</button>
+    </div>
+  </div>
   }
-</ul>
+</div>
 
-@if (products.length > 0) {
-    <button (click)="goToCheckout()">Checkout</button>
-}

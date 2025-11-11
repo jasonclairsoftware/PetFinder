@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Product } from '../models/product';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Storeservice } from '../services/storeservice';
 
 @Component({
   selector: 'app-store',
@@ -10,26 +10,16 @@ import { Router } from '@angular/router';
   styleUrl: './store.scss'
 })
 export class Store {
-  public products: Product[] = [];
-  private cart: Product[] = [];
+  public products: Product[]= [];
 
-  constructor(private router: Router) {}
+  constructor(private storeService: Storeservice) { }
 
   ngOnInit() {
-    this.products = [
-      {id: 1, name: "GPS Collar" },
-      {id: 2, name: "LED collar"},
-      {id: 3, name: "Teleportation Collar"}
-    ];
+    this.products = this.storeService.getProducts();
   }
 
   addToCart(product: Product) {
-    this.cart.push(product);
-    console.log(product.name + " Added to cart")
-  }
-
-  goToCheckout() {
-    this.router.navigate(["/checkout"]);
+    this.storeService.addToCart(product);
   }
 
 }

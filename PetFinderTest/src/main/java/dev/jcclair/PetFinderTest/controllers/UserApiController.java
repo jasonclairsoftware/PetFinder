@@ -1,23 +1,35 @@
 package dev.jcclair.PetFinderTest.controllers;
 
 import dev.jcclair.PetFinderTest.models.UserModel;
+import dev.jcclair.PetFinderTest.security.JwtTokenProvider;
 import dev.jcclair.PetFinderTest.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:4200")
-public class UserController {
+public class UserApiController {
 
     private UserService userService;
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
+    private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
+    private AuthenticationManager authenticationManager;
+    private JwtTokenProvider tokenProvider;
 
-    public UserController(UserService userService) {
+    public UserApiController(UserService userService, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
         this.userService = userService;
+        this.tokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
@@ -60,7 +72,7 @@ public class UserController {
         // All negative cases passed. Registration complete
         if (user != null) {
             log.info("User registration success. " + user.getEmail() + " has been registered");
-            return ResponseEntity.ok("User Registration Successful");
+            return ResponseEntity.ok(user);
         }
         log.warn("Attempted user registration failed. Unknown Error");
         return new ResponseEntity<>("Unknown error registering", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,17 +94,29 @@ public class UserController {
             log.warn("Password is blank");
             return new ResponseEntity<>("Password is blank", HttpStatus.BAD_REQUEST);
         }
-        if(!this.userService.autherizeUser(user)) {
+        if(!this.userService.authorizeUser(user)) {
             log.warn("mismatch email or password");
             return new ResponseEntity<>("Mismatch email or password", HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>("Login Successful", HttpStatus.OK);
+        // All is good. Generate Token
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        user.getEmail(),
+                        user.getPassword()
+                )
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = tokenProvider.generateToken(authentication);
+        Map<String, String> response = new HashMap<>();
+        response.put("token", jwt);
+        response.put("email", user.getEmail());
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> testController() {
-        log.debug("Test Controller works");
-        return new ResponseEntity<>("Test Controller works", HttpStatus.OK);
-    }
+    // TODO:: Update User
+
+    // TODO:: Delete User
+
 }

@@ -9,15 +9,23 @@ public class PetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private UserEntity userEntity;
     private String name;
+    private String breed;
+    @Column(name = "imageUrl", nullable = true)
+    private String imageUrl;
 
     public PetEntity() {
     }
 
-    public PetEntity(long id, String name) {
+    public PetEntity(long id, UserEntity userEntity, String name, String breed, String imageUrl) {
         this.id = id;
+        this.userEntity = userEntity;
         this.name = name;
+        this.breed = breed;
+        this.imageUrl = imageUrl;
     }
 
     public long getId() {
@@ -28,6 +36,14 @@ public class PetEntity {
         this.id = id;
     }
 
+    public UserEntity getUserEntity() {
+        return userEntity;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
     public String getName() {
         return name;
     }
@@ -36,11 +52,19 @@ public class PetEntity {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        return "PetModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+    public String getBreed() {
+        return breed;
+    }
+
+    public void setBreed(String breed) {
+        this.breed = breed;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
