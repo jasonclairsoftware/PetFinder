@@ -26,7 +26,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/**", "/api/pets/**").permitAll()  // Allow login/register
+                        .requestMatchers("/api/users/**", "/api/pets/**", "/**").permitAll()  // Allow login/register
                         .anyRequest().authenticated()                 // Everything else needs JWT
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class); // Critical!

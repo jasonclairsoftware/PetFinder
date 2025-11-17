@@ -16,6 +16,8 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     private UserDao userDao;
 
+    public UserService() {}
+
     public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;

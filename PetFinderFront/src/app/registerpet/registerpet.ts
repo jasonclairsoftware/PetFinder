@@ -4,6 +4,7 @@ import { Authservice } from '../services/authservice';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Petservice } from '../services/petservice';
 
 @Component({
   selector: 'app-registerpet',
@@ -16,7 +17,7 @@ export class Registerpet {
    registerForm: FormGroup;
   errorMessage: string = '';
 
-  constructor(private authService: Authservice, private fb: FormBuilder, private router: Router) {
+  constructor(private authService: Authservice, private fb: FormBuilder, private router: Router, private petService: Petservice) {
     this.registerForm = this.fb.group({
       id: [0],
       ownerId: [-1],
@@ -38,7 +39,8 @@ export class Registerpet {
         breed: this.registerForm.value.breed, 
         imageUrl: this.registerForm.value.imageUrl };
 
-        // TODO:: subscribe to petservice
+        // Registering pet with pet service
+
       
     }
 

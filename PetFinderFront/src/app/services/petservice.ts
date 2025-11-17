@@ -16,9 +16,9 @@ export interface RegisterResponse {
 })
 export class Petservice {
 
-  constructor(private http: HttpClient) {
+  public pets: Pet[] = [];
 
-  }
+  constructor(private http: HttpClient) {}
 
 
     register(credentials: { name: string; breed: string, imageUrl: string }): Observable<RegisterResponse> {

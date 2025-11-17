@@ -115,8 +115,5 @@ public class UserApiController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO:: Update User
-
-    // TODO:: Delete User
 
 }
