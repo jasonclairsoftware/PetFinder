@@ -17,16 +17,22 @@
         </div>
 
         <button type="button" class="btn btn-primary d-flex" routerLink="/map">Map</button>
-        <button type="button" class="btn btn-primary d-flex" (click)="test()">Test isLoggedIn</button>
-        <button type="button" class="btn btn-primary d-flex" (click)="registerPet()">Test Register Pet</button>
+        @if(isAuthenticated$ | async; as isLoggedIn) {
 
-        @if (currentUser$; as loggedInUser) {
-        <button type="button" class="btn btn-primary d-flex" (click)="logout()">Logout</button>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-bs-toggle="dropdown" aria-expanded="false">
+                First
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                <li><button class="dropdown-item" (click)="test()">Register Pet</button></li>
+                <li><button class="dropdown-item" (click)="test()">Update Pet</button></li>
+                <li><button class="dropdown-item" (click)="onLogout()">Logout</button></li>
+            </ul>
+        </div>
         } @else {
-        <button type="button" class="btn btn-primary d-flex" routerLink="/login">Login</button>
+        <button type="button" class="btn btn-primary d-flex" (click)="onLogin()">Login</button>
         }
-
-
 
     </div>
 </nav>

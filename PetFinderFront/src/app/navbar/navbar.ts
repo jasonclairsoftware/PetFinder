@@ -1,34 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
 import { Observable } from 'rxjs';
-import { UserModel } from '../models/user-model';
 import { Authservice } from '../services/authservice';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink],
+  imports: [RouterLink, AsyncPipe],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss'
 })
-export class Navbar {
-  public currentUser$: Observable<UserModel | null>;
+export class Navbar implements OnInit {
 
-  constructor(private authService: Authservice, private router: Router) { 
-    this.currentUser$ = authService.currentUser$;
+  isAuthenticated$!: Observable<boolean>;
+
+  constructor(private authService: Authservice, private router: Router) { }
+
+  ngOnInit(): void {
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
   }
 
-  logout() {
+  onLogout(): void {
     this.authService.logout();
+  }
+
+  onLogin(): void {
     this.router.navigate(["/login"]);
   }
 
-  test() {
-    console.log("Logged in with token: " + this.authService.isLogged());
-  }
-
-  registerPet() {
-    if(this.authService.isLogged())
-      this.router.navigate(["/registerpet"]);
+  test(): void {
+    console.log("Test hit");
   }
 
 }

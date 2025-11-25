@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Pet } from '../models/pet';
-import { Authservice } from '../services/authservice';
+import { Pet } from '../../models/pet';
+import { Authservice } from '../../services/authservice';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Petservice } from '../services/petservice';
+import { Petservice } from '../../services/petservice';
 
 @Component({
   selector: 'app-registerpet',

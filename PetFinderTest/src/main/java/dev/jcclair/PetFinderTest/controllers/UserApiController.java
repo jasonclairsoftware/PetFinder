@@ -1,15 +1,13 @@
 package dev.jcclair.PetFinderTest.controllers;
 
 import dev.jcclair.PetFinderTest.models.UserModel;
-import dev.jcclair.PetFinderTest.security.JwtTokenProvider;
+import dev.jcclair.PetFinderTest.services.JwtService;
 import dev.jcclair.PetFinderTest.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +21,11 @@ public class UserApiController {
 
     private UserService userService;
     private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
-    private AuthenticationManager authenticationManager;
-    private JwtTokenProvider tokenProvider;
+    @Autowired
+    private JwtService jwtService;
 
-    public UserApiController(UserService userService, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager) {
+    public UserApiController(UserService userService) {
         this.userService = userService;
-        this.tokenProvider = jwtTokenProvider;
-        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/register")
@@ -82,37 +78,19 @@ public class UserApiController {
 
     @PostMapping("/login")
     public ResponseEntity<?> userLogin(@RequestBody UserModel user) {
-        if(user == null) {
-            log.warn("User is null");
-            return new ResponseEntity<>("User is null", HttpStatus.BAD_REQUEST);
-        }
-        if(user.getEmail().isBlank()) {
-            log.warn("Email is blank");
-            return new ResponseEntity<>("Email is blank", HttpStatus.BAD_REQUEST);
-        }
-        if(user.getPassword().isBlank()) {
-            log.warn("Password is blank");
-            return new ResponseEntity<>("Password is blank", HttpStatus.BAD_REQUEST);
-        }
-        if(!this.userService.authorizeUser(user)) {
-            log.warn("mismatch email or password");
-            return new ResponseEntity<>("Mismatch email or password", HttpStatus.BAD_REQUEST);
-        }
 
-        // All is good. Generate Token
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        user.getEmail(),
-                        user.getPassword()
-                )
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
+        String jwt = userService.verify(user);
         Map<String, String> response = new HashMap<>();
         response.put("token", jwt);
-        response.put("email", user.getEmail());
+        response.put("message", "Login Successful");
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        UserModel result = this.userService.findUserByEmail(email);
+        result.setPassword(""); // Removing the password
+        return ResponseEntity.ok(result);
     }
 
 

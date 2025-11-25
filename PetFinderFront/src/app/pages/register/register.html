@@ -1,0 +1,25 @@
+<!-- Header -->
+<div style="display: flex; justify-content: center;">
+    <h1>Register New User</h1>
+</div>
+
+<!-- Form Submission -->
+<div id="register-container">
+    <form [formGroup]="registerForm" (submit)="onSubmit()">
+
+            <label for="fName">First Name</label>
+            <input type="text" formControlName="fName" placeholder="John"/>
+            <label for="lName">Last Name</label>
+            <input type="text" formControlName="lName" placeholder="Doe"/>
+            <label for="phone">Phone Number</label>
+            <input type="text" formControlName="phone" placeholder="(xxx)xxx-xxxx"/>
+            <label for="email">Email</label>
+            <input type="email" formControlName="email" placeholder="johndoe@mail.com"/>
+            <label for="password">Password</label>
+            <input type="password" formControlName="password" placeholder="Strong Password"/>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+        @if (errorMessage != '') {
+        <p style="color: red;">{{errorMessage}}</p>
+    }
+</div>

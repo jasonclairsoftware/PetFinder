@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Product } from '../models/product';
+import { Product } from '../../models/product';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Storeservice } from '../services/storeservice';
+import { Storeservice } from '../../services/storeservice';
 
 @Component({
   selector: 'app-store',

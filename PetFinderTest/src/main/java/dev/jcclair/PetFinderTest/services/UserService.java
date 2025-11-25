@@ -3,6 +3,10 @@ package dev.jcclair.PetFinderTest.services;
 import dev.jcclair.PetFinderTest.daos.UserDao;
 import dev.jcclair.PetFinderTest.models.UserEntity;
 import dev.jcclair.PetFinderTest.models.UserModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +19,14 @@ public class UserService {
 
     private PasswordEncoder passwordEncoder;
     private UserDao userDao;
+    private AuthenticationManager authManager;
+    @Autowired
+    private JwtService jwtService;
 
-    public UserService() {}
-
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder, AuthenticationManager authManager) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.authManager = authManager;
     }
 
 
@@ -64,11 +70,10 @@ public class UserService {
 
     public UserModel registerUserRequest(UserModel user) {
         // Create working object
-        UserEntity userEntity = new UserEntity();
-        // Assign email
-        userEntity.setEmail(user.getEmail());
+        UserEntity userEntity;
         // Hashing password
-        userEntity.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        String hashed = this.passwordEncoder.encode(user.getPassword());
+        userEntity = new UserEntity(0, user.getfName(), user.getlName(), user.getEmail(), hashed, user.getPhone());
         // Saving user
         userEntity = this.userDao.save(userEntity);
         if(userEntity.getId() == -1 || userEntity == null)
@@ -77,19 +82,30 @@ public class UserService {
         return this.userEntityToUserViewModel(userEntity);
     }
 
-    public boolean authorizeUser(UserModel user) {
-        UserModel selectedUser = this.findUserByEmail(user.getEmail());
-        if(selectedUser == null) return false;
-        return this.passwordEncoder.matches(user.getPassword(), selectedUser.getPassword());
-    }
 
     private UserModel userEntityToUserViewModel(UserEntity user) {
-        return user == null ? null : new UserModel(user.getEmail(), user.getPassword());
+        return user == null ? null : new UserModel(
+                user.getId(),
+                user.getfName(),
+                user.getlName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getPhone());
     }
 
     public UserModel findUserById(long ownerId) {
         Optional<UserEntity> user = this.userDao.findById(ownerId);
 
         return user.isPresent() ? this.userEntityToUserViewModel(user.get()) : null;
+    }
+
+    public String verify(UserModel user) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+
+        if(authentication.isAuthenticated()) {
+            return this.jwtService.generateToken(user);
+        }
+        return "fail";
+
     }
 }

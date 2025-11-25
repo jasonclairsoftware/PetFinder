@@ -8,18 +8,24 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private String fName;
+    private String lName;
     @Column(nullable = false, unique = true)
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
+    private String phone;
 
     public UserEntity() {
     }
 
-    public UserEntity(long id, String email, String password) {
+    public UserEntity(long id, String fName, String lName, String email, String password, String phone) {
         this.id = id;
+        this.fName = fName;
+        this.lName = lName;
         this.email = email;
         this.password = password;
+        this.phone = phone;
     }
 
     public long getId() {
@@ -28,6 +34,22 @@ public class UserEntity {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getfName() {
+        return fName;
+    }
+
+    public void setfName(String fName) {
+        this.fName = fName;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
     }
 
     public String getEmail() {
@@ -46,12 +68,11 @@ public class UserEntity {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

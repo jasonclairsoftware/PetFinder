@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { Login } from './login/login';
-import { Home } from './home/home';
-import { Register } from './register/register';
-import { Store } from './store/store';
-import { Checkout } from './checkout/checkout';
-import { Map } from './map/map';
-import { Cart } from './cart/cart';
-import { Registerpet } from './registerpet/registerpet';
+import { Login } from './pages/login/login';
+import { Home } from './pages/home/home';
+import { Register } from './pages/register/register';
+import { Store } from './pages/store/store';
+import { Checkout } from './pages/checkout/checkout';
+import { Map } from './pages/map/map';
+import { Cart } from './pages/cart/cart';
+import { Registerpet } from './pages/registerpet/registerpet';
 
 export const routes: Routes = [
     { path: '', component:Home},

@@ -1,15 +1,56 @@
 package dev.jcclair.PetFinderTest.models;
 
 public class UserModel {
+
+    private long id;
+    private String fName;
+    private String lName;
     private String email;
     private String password;
+    private String phone;
 
     public UserModel() {
     }
 
-    public UserModel(String email, String password) {
+    public UserModel(String fName, String lName, String email, String password, String phone) {
+        this.fName = fName;
+        this.lName = lName;
         this.email = email;
         this.password = password;
+        this.phone = phone;
+    }
+
+    public UserModel(long id, String fName, String lName, String email, String password, String phone) {
+        this.id = id;
+        this.fName = fName;
+        this.lName = lName;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getfName() {
+        return fName;
+    }
+
+    public void setfName(String fName) {
+        this.fName = fName;
+    }
+
+    public String getlName() {
+        return lName;
+    }
+
+    public void setlName(String lName) {
+        this.lName = lName;
     }
 
     public String getEmail() {
@@ -28,11 +69,11 @@ public class UserModel {
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }
