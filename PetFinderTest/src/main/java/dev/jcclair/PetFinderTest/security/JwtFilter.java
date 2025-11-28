@@ -26,11 +26,24 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private ApplicationContext context;
 
+    private static final String[] PUBLIC_PATHS = {
+            "/api/users/login",
+            "/api/users/register"
+    };
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         String token = null;
         String username = null;
+        final String requestPath = request.getRequestURI();
+
+        for (String publicPath : PUBLIC_PATHS) {
+            if (requestPath.startsWith(publicPath)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+        }
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);

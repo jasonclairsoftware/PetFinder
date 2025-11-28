@@ -22,11 +22,14 @@
         <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                 data-bs-toggle="dropdown" aria-expanded="false">
-                First
+                <!--*ngIf="loggedUser$ | async as user"-->
+                @if(loggedUser$ | async; as user) {
+                    <div>{{user.fName}}</div>
+                }
             </button>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                <li><button class="dropdown-item" (click)="test()">Register Pet</button></li>
-                <li><button class="dropdown-item" (click)="test()">Update Pet</button></li>
+                <li><button class="dropdown-item" disabled>Register Pet</button></li>
+                <li><button class="dropdown-item" disabled>Update Pet</button></li>
                 <li><button class="dropdown-item" (click)="onLogout()">Logout</button></li>
             </ul>
         </div>

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserModel } from '../models/user-model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Userservice } from './userservice';
 
 export interface LoginResponse {
   token: string;
@@ -33,7 +34,6 @@ export class Authservice {
       email: email,
       password: password
     }
-
     return this.http.post<LoginResponse>(this.url + "/login", loginRequest);
   }
 
