@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/pets")
 @CrossOrigin(origins = "http://localhost:4200")
@@ -47,11 +49,13 @@ public class PetApiController {
         return ResponseEntity.ok(pet);
     }
 
-    // TODO:: Get pets by owner ID
+    @GetMapping
+    public ResponseEntity<?> getPetsByUserId(@RequestParam("ownerId") String id) {
+        List<PetModel> pets = this.petService.getPetsById(Integer.parseInt(id));
+        return ResponseEntity.ok(pets);
+    }
 
-    // TODO:: Update Pet
-
-    // TODO:: Delete Pet
+    // TODO:: Get all pets
 
 
 }

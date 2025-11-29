@@ -16,16 +16,26 @@ public class PetEntity {
     private String breed;
     @Column(name = "imageUrl", nullable = true)
     private String imageUrl;
+    private String location;
 
     public PetEntity() {
     }
 
-    public PetEntity(long id, UserEntity userEntity, String name, String breed, String imageUrl) {
+    public PetEntity(long id, UserEntity userEntity, String name, String breed, String imageUrl, String location) {
         this.id = id;
         this.userEntity = userEntity;
         this.name = name;
         this.breed = breed;
         this.imageUrl = imageUrl;
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public long getId() {

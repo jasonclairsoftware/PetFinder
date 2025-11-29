@@ -29,6 +29,7 @@ export class Userservice {
 
   constructor(private http: HttpClient) { }
 
+  /*
   getUser2(email: string): Observable<UserModel> {
     const params = { email: email };
 
@@ -36,6 +37,7 @@ export class Userservice {
       params: params
     });
   }
+    */
 
   getUser(email: string): Observable<UserModel> {
     return this.http.get<UserModel>(this.url + `/${email}`).pipe(

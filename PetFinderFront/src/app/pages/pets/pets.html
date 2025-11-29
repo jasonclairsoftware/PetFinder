@@ -1,0 +1,27 @@
+<div id="section-container">
+    <!-- Pets information -->
+    <div id="pet-list-container">
+        @for (pet of pets; track pet.id) {
+        <li class="pet-card">
+            <img [src]="pet.imageUrl" [alt]="'Image of ' + pet.name" class="pet-image">
+
+            <div class="pet-details">
+                <h3>{{ pet.name }}</h3>
+                <p class="pet-breed">{{ pet.breed }}</p>
+            </div>
+        </li>
+        } @empty {
+        <li>There are no items.</li>
+        }
+        <button routerLink="/registerpet">Register New Pet</button>
+    </div>
+
+    <!-- User Information -->
+    <div id="user-container">
+        @if (loggedUser$ | async; as user) {
+        <h3>User: {{ user.fName }} {{ user.lName }}</h3>
+        <p>Phone: {{ user.phone }}</p>
+        }
+
+    </div>
+</div>

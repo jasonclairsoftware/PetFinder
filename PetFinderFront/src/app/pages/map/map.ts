@@ -40,9 +40,8 @@ export class Map {
   }
 
   private onLocationFound(e: L.LocationEvent): void {
-    const radius = e.accuracy / 2; // Accuracy in meters
+    const radius = e.accuracy / 2;
 
-    // Good for reference to post pets ~ Jason C
     const myIcon = L.icon({
       iconUrl: 'Yuri.png',
       iconSize: [40, 40],
@@ -50,7 +49,6 @@ export class Map {
       popupAnchor: [0, -20]
     });
 
-    // Add your custom icon at the user's location
     L.marker(e.latlng, { icon: myIcon })
         .addTo(this.map)
         .bindPopup(`Yuri: (602)867-2345`);
@@ -60,7 +58,6 @@ export class Map {
   private onLocationError(e: L.ErrorEvent): void {
     console.error(e.message);
     alert('Location access denied or unavailable. Showing default location.');
-    // The map remains centered on the initial coordinates
   }
 
 }

@@ -6,14 +6,17 @@
 <!-- Form Submission -->
 <div id="register-container">
     <form [formGroup]="registerForm" (submit)="onSubmit()">
-            <label for="name">Pet Name</label>
-            <input type="name" formControlName="name"/>
-            <label for="breed">Breed</label>
-            <input type="breed" formControlName="breed"/>
-            <!--TODO:: Enter Image drop here -->
+        <label for="name">Pet Name</label>
+        <input type="name" formControlName="name" />
+        <label for="breed">Breed</label>
+        <input type="breed" formControlName="breed" />
+        <label for="image">Image</label>
+        <input type="imageUrl" formControlName="imageUrl" />
+        <label for="location">Location</label>
+        <input type="location" formControlName="location" />
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-        @if (errorMessage != '') {
-        <p style="color: red;">{{errorMessage}}</p>
+    @if (errorMessage != '') {
+    <p style="color: red;">{{errorMessage}}</p>
     }
 </div>

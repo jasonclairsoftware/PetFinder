@@ -7,6 +7,7 @@ import { Checkout } from './pages/checkout/checkout';
 import { Map } from './pages/map/map';
 import { Cart } from './pages/cart/cart';
 import { Registerpet } from './pages/registerpet/registerpet';
+import { Pets } from './pages/pets/pets';
 
 export const routes: Routes = [
     { path: '', component:Home},
@@ -16,5 +17,6 @@ export const routes: Routes = [
     { path: 'checkout', component: Checkout},
     { path: 'map', component: Map},
     { path: 'cart', component: Cart },
-    { path: 'registerpet', component: Registerpet}
+    { path: 'registerpet', component: Registerpet},
+    { path: 'pets', component: Pets }
 ];

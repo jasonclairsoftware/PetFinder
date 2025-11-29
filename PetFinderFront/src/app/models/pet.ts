@@ -3,5 +3,6 @@ export interface Pet {
     ownerId: number;
     name: string;
     breed: string;
-    imageUrl: string
+    imageUrl: string;
+    location: string;
 }

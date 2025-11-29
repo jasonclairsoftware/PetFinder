@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Pet } from '../models/pet';
 
 export interface RegisterResponse {
@@ -9,6 +9,7 @@ export interface RegisterResponse {
   name: string;
   breed: string;
   imageUrl: string;
+  location: string;
 }
 
 @Injectable({
@@ -16,26 +17,32 @@ export interface RegisterResponse {
 })
 export class Petservice {
 
-  public pets: Pet[] = [];
+  private url: string = "http://localhost:8080/api/pets";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
 
-    register(credentials: { name: string; breed: string, imageUrl: string }): Observable<RegisterResponse> {
-      return this.http.post<RegisterResponse>('http://localhost:8080/api/pets/register', credentials)
-        .pipe(
-          tap(response => {
-  
-            const newPet: Pet = {
-              id: response.id,
-              ownerId: response.ownerId,
-              name: response.name,
-              breed: response.breed,
-              imageUrl: response.imageUrl
-            }
-  
-          })
-        );
-    }
-  
+  register(credentials: { name: string; breed: string, imageUrl: string, ownerId: number, location: string }): Observable<Pet> {
+    return this.http.post<Pet>(this.url + '/register', credentials)
+      .pipe(
+        tap(response => {
+
+          const newPet: Pet = {
+            id: response.id,
+            ownerId: response.ownerId,
+            name: response.name,
+            breed: response.breed,
+            imageUrl: response.imageUrl,
+            location: response.location
+          }
+
+        })
+      );
+  }
+
+  getPets(id: number): Observable<Pet[]> {
+    let params = new HttpParams().set('ownerId', id.toString());
+    return this.http.get<Pet[]>(this.url, { params: params });
+  }
+
 }

@@ -7,6 +7,8 @@ import dev.jcclair.PetFinderTest.models.PetModel;
 import dev.jcclair.PetFinderTest.models.UserEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -35,10 +37,20 @@ public class PetService {
         if(user.isEmpty()) return null;
 
         // Return the saved pet
-        return new PetEntity(pet.getId(), user.get(), pet.getName(), pet.getBreed(), pet.getImageUrl());
+        return new PetEntity(pet.getId(), user.get(), pet.getName(), pet.getBreed(), pet.getImageUrl(), pet.getLocation());
     }
 
     private PetModel petEntityToPetModel(PetEntity pet) {
-        return new PetModel(pet.getId(), pet.getUserEntity().getId(), pet.getName(), pet.getBreed(), pet.getImageUrl());
+        return new PetModel(pet.getId(), pet.getUserEntity().getId(), pet.getName(), pet.getBreed(), pet.getImageUrl(), pet.getLocation());
+    }
+
+    public List<PetModel> getPetsById(int id) {
+        List<PetEntity> result = this.petDao.findByUserEntity_Id(id);
+        List<PetModel> pets = new ArrayList<>();
+
+        for(PetEntity pet: result) {
+            pets.add(new PetModel(pet.getId(), pet.getUserEntity().getId(), pet.getName(), pet.getBreed(), pet.getImageUrl(), pet.getLocation()));
+        }
+        return pets;
     }
 }

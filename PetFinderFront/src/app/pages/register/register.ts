@@ -38,16 +38,6 @@ export class Register {
       password: this.registerForm.value.password,
       phone: this.registerForm.value.phone };
 
-
-/*
-    this.authService.register(this.registerForm.value).subscribe({
-      next: res => {
-        console.log('OK', res)
-        this.router.navigate(['/login']);
-      },
-      error: err => console.error('FAIL', err)
-    });
-    */
   }
 
 }

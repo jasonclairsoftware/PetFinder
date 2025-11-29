@@ -1,23 +1,32 @@
 package dev.jcclair.PetFinderTest.models;
 
-import jakarta.persistence.Column;
-
 public class PetModel {
     private long id;
     private long ownerId;
     private String name;
     private String breed;
     private String imageUrl;
+    private String location;
 
     public PetModel() {
     }
 
-    public PetModel(long id, long ownerId, String name, String breed, String imageUrl) {
+    public PetModel(long id, long ownerId, String name, String breed, String imageUrl, String location) {
         this.id = id;
         this.ownerId = ownerId;
         this.name = name;
         this.breed = breed;
         this.imageUrl = imageUrl;
+        this.location = location;
+
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public long getId() {

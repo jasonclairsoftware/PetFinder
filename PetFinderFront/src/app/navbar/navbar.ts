@@ -33,8 +33,5 @@ export class Navbar implements OnInit {
     this.router.navigate(["/login"]);
   }
 
-  test(): void {
-    console.log("Test hit");
-  }
 
 }
