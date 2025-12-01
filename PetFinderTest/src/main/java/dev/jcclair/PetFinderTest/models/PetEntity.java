@@ -2,10 +2,16 @@ package dev.jcclair.PetFinderTest.models;
 
 import jakarta.persistence.*;
 
+/**
+ * Pet Entity for RDS
+ */
 @Entity
 @Table(name = "pets")
 public class PetEntity {
 
+    //------------------------------------------------------------------------------------
+    // START OF PROPERTIES
+    //------------------------------------------------------------------------------------
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -18,9 +24,26 @@ public class PetEntity {
     private String imageUrl;
     private String location;
 
+
+    //------------------------------------------------------------------------------------
+    // END OF PROPERTIES - START OF CONSTRUCTORS
+    //------------------------------------------------------------------------------------
+
+    /**
+     * Default constructor
+     */
     public PetEntity() {
     }
 
+    /**
+     * Overloaded constructor
+     * @param id - ID of Pet
+     * @param userEntity - Joined User for owner
+     * @param name - Name of pet
+     * @param breed - Breed of pet
+     * @param imageUrl - Location for pet Image
+     * @param location - Location of pet
+     */
     public PetEntity(long id, UserEntity userEntity, String name, String breed, String imageUrl, String location) {
         this.id = id;
         this.userEntity = userEntity;
@@ -29,6 +52,10 @@ public class PetEntity {
         this.imageUrl = imageUrl;
         this.location = location;
     }
+
+    //------------------------------------------------------------------------------------
+    // END OF CONSTRUCTORS - START OF METHODS
+    //------------------------------------------------------------------------------------
 
     public String getLocation() {
         return location;
@@ -77,4 +104,8 @@ public class PetEntity {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    //------------------------------------------------------------------------------------
+    // END OF METHODS
+    //------------------------------------------------------------------------------------
 }

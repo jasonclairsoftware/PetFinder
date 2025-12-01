@@ -29,16 +29,6 @@ export class Userservice {
 
   constructor(private http: HttpClient) { }
 
-  /*
-  getUser2(email: string): Observable<UserModel> {
-    const params = { email: email };
-
-    return this.http.get<UserModel>(this.url + "/login", {
-      params: params
-    });
-  }
-    */
-
   getUser(email: string): Observable<UserModel> {
     return this.http.get<UserModel>(this.url + `/${email}`).pipe(
       tap(user => this.loggedUserSubject.next(user))
@@ -51,6 +41,15 @@ export class Userservice {
 
   clearLoggedUser() {
     this.loggedUserSubject.next(null);
+  }
+
+  getUserById(id: number): Observable<UserModel> {
+    const userUrl = `${this.url}/id/${id}`;
+    return this.http.get<UserModel>(userUrl);
+  }
+
+  registerUser(user: UserModel): Observable<UserModel> {
+    return this.http.post<UserModel>(this.url + "/register", user);
   }
 
 

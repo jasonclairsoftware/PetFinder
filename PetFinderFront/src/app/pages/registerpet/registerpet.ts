@@ -39,34 +39,34 @@ export class Registerpet implements OnInit {
 
 
   onSubmit() {
-  this.loggedUser$.pipe(
-    take(1),
-    
-filter((user: UserModel | null): user is UserModel & { id: number } => 
-        !!user && typeof user.id === 'number'),
-    
-    switchMap((user: UserModel & { id: number }) => {
-      const newPet: Pet = {
-        ownerId: user.id,
-        name: this.registerForm.value.name,
-        breed: this.registerForm.value.breed,
-        imageUrl: this.registerForm.value.imageUrl,
-        location: this.registerForm.value.location,
-      };
+    this.loggedUser$.pipe(
+      take(1),
 
-      return this.petService.register(newPet);
-    })
-    
-  ).subscribe({
-    next: (registeredPet: Pet) => {
-      console.log('Pet registered successfully:', registeredPet);
-      this.router.navigate(["/pets"]);
-    },
-    error: (err: any) => {
-      console.error('Registration failed:', err);
-      this.errorMessage = 'Failed to register pet. Please try again.';
-    }
-  });
-}
+      filter((user: UserModel | null): user is UserModel & { id: number } =>
+        !!user && typeof user.id === 'number'),
+
+      switchMap((user: UserModel & { id: number }) => {
+        const newPet: Pet = {
+          ownerId: user.id,
+          name: this.registerForm.value.name,
+          breed: this.registerForm.value.breed,
+          imageUrl: this.registerForm.value.imageUrl,
+          location: this.registerForm.value.location,
+        };
+
+        return this.petService.register(newPet);
+      })
+
+    ).subscribe({
+      next: (registeredPet: Pet) => {
+        console.log('Pet registered successfully:', registeredPet);
+        this.router.navigate(["/pets"]);
+      },
+      error: (err: any) => {
+        console.error('Registration failed:', err);
+        this.errorMessage = 'Failed to register pet. Please try again.';
+      }
+    });
+  }
 
 }

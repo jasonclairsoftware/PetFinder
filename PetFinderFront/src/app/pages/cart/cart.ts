@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Storeservice } from '../../services/storeservice';
+import { Observable } from 'rxjs';
+import { Product } from '../../models/product';
 
 @Component({
   selector: 'app-cart',
@@ -7,5 +10,13 @@ import { Component } from '@angular/core';
   styleUrl: './cart.scss'
 })
 export class Cart {
+
+  cart$: Observable<Product[] | null>;
+
+  constructor(private storeService: Storeservice) {
+    this.cart$ = storeService.cart$;
+
+  }
+
 
 }

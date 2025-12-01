@@ -13,23 +13,48 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Rest Controller to handle users
+ *
+ * @author Jason Clair
+ */
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserApiController {
+
+    //------------------------------------------------------------------------------------
+    // START OF PROPERTIES
+    //------------------------------------------------------------------------------------
 
     private UserService userService;
     private static final Logger log = LoggerFactory.getLogger(UserApiController.class);
     @Autowired
     private JwtService jwtService;
 
+    //------------------------------------------------------------------------------------
+    // END OF PROPERTIES - START OF CONSTRUCTORS
+    //------------------------------------------------------------------------------------
+
+    /**
+     * Constructor for the userController to inject spring beans
+     * @param userService - Injected user service to handle services
+     */
     public UserApiController(UserService userService) {
         this.userService = userService;
     }
 
+    //------------------------------------------------------------------------------------
+    // END OF CONSTRUCTORS - START OF METHODS
+    //------------------------------------------------------------------------------------
+
+    /**
+     * Will attempt to register a new user
+     * @param user - Object to be saved
+     * @return - The saved user
+     */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserModel user) {
-
         // Validate if there is an email
         if (user == null) {
             log.warn("Attempted user registration failed. User is null");
@@ -75,6 +100,11 @@ public class UserApiController {
 
     } // End of registerUser method
 
+    /**
+     * Will attempt to create a JWT Token
+     * @param user - The object to be validated
+     * @return - JWT token
+     */
     @PostMapping("/login")
     public ResponseEntity<?> userLogin(@RequestBody UserModel user) {
 
@@ -85,6 +115,11 @@ public class UserApiController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Will attempt to get a user by email
+     * @param email - The email being compared
+     * @return - User object
+     */
     @GetMapping("/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
         UserModel result = this.userService.findUserByEmail(email);
@@ -92,5 +127,18 @@ public class UserApiController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * Will attempt to get user by ID
+     * @param id - The ID of the user
+     * @return - User Object
+     */
+    @GetMapping("/id/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable String id) {
+        UserModel result = this.userService.findUserById(Integer.parseInt(id));
+        return ResponseEntity.ok(result);
+    }
 
+    //------------------------------------------------------------------------------------
+    // END OF METHODS
+    //------------------------------------------------------------------------------------
 }

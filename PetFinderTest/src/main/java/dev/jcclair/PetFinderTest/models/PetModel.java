@@ -1,6 +1,16 @@
 package dev.jcclair.PetFinderTest.models;
 
+/**
+ * Pet View Model
+ *
+ * @author Jason Clair
+ */
 public class PetModel {
+
+    //------------------------------------------------------------------------------------
+    // START OF PROPERTIES
+    //------------------------------------------------------------------------------------
+
     private long id;
     private long ownerId;
     private String name;
@@ -8,9 +18,25 @@ public class PetModel {
     private String imageUrl;
     private String location;
 
+    //------------------------------------------------------------------------------------
+    // END OF PROPERTIES - START OF CONSTRUCTORS
+    //------------------------------------------------------------------------------------
+
+    /**
+     * Default constructor
+     */
     public PetModel() {
     }
 
+    /**
+     * Overloaded constructor
+     * @param id - Id of pet
+     * @param ownerId - ID of the owner
+     * @param name - Name of pet
+     * @param breed - Breed of pet
+     * @param imageUrl - Image location of pet
+     * @param location - Location of pet
+     */
     public PetModel(long id, long ownerId, String name, String breed, String imageUrl, String location) {
         this.id = id;
         this.ownerId = ownerId;
@@ -20,6 +46,10 @@ public class PetModel {
         this.location = location;
 
     }
+
+    //------------------------------------------------------------------------------------
+    // END OF CONSTRUCTORS - START OF METHODS
+    //------------------------------------------------------------------------------------
 
     public String getLocation() {
         return location;
@@ -79,4 +109,8 @@ public class PetModel {
                 ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
+
+    //------------------------------------------------------------------------------------
+    // END METHODS
+    //------------------------------------------------------------------------------------
 }

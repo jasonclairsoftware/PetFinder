@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Authservice } from '../../services/authservice';
 import { UserModel } from '../../models/user-model';
 import { Router } from '@angular/router';
+import { Userservice } from '../../services/userservice';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,7 @@ export class Register {
   errorMessage: string = '';
 
   // CTOR
-  constructor(private authService: Authservice, private fb: FormBuilder, private router: Router) {
+  constructor(private userService: Userservice, private fb: FormBuilder, private router: Router) {
     this.registerForm = this.fb.group({
       fName: ['', [Validators.required]],
       lName: ['', Validators.required],
@@ -28,15 +29,24 @@ export class Register {
   }
 
   onSubmit() {
-    console.log("Form Information - " + "Email: " + this.registerForm.value.email + "; Password: " + this.registerForm.value.password);
 
-    let user: UserModel = { 
-      id: 0, 
-      fName: this.registerForm.value.first,
-      lName: this.registerForm.value.last,
-      email: this.registerForm.value.email, 
+    let user: UserModel = {
+      fName: this.registerForm.value.fName,
+      lName: this.registerForm.value.lName,
+      email: this.registerForm.value.email,
       password: this.registerForm.value.password,
-      phone: this.registerForm.value.phone };
+      phone: this.registerForm.value.phone
+    };
+
+    this.userService.registerUser(user).subscribe({
+      next: (res) => {
+        if(res)
+          this.router.navigate(["/login"]);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
 
   }
 

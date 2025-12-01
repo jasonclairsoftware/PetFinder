@@ -42,7 +42,11 @@ export class Petservice {
 
   getPets(id: number): Observable<Pet[]> {
     let params = new HttpParams().set('ownerId', id.toString());
-    return this.http.get<Pet[]>(this.url, { params: params });
+    return this.http.get<Pet[]>(this.url + "/users", { params: params });
+  }
+
+  getAllPets(): Observable<Pet[]> {
+    return this.http.get<Pet[]>(this.url);
   }
 
 }

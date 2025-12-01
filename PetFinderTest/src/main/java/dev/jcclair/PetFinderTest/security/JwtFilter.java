@@ -17,8 +17,17 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filter chain for the JWT. This was a PAIN!!
+ *
+ * @author Jason Clair
+ */
 @Component
 public class JwtFilter extends OncePerRequestFilter {
+
+    //------------------------------------------------------------------------------------
+    // START OF PROPERTIES
+    //------------------------------------------------------------------------------------
 
     @Autowired
     private JwtService jwtService;
@@ -26,11 +35,26 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private ApplicationContext context;
 
+    // Clears paths that don't need JWT
     private static final String[] PUBLIC_PATHS = {
             "/api/users/login",
-            "/api/users/register"
+            "/api/users/register",
+            "/api/users",
+            "/api/pets"
     };
 
+    //------------------------------------------------------------------------------------
+    // END OF PROPERTIES - START OF METHODS
+    //------------------------------------------------------------------------------------
+
+    /**
+     * Handling the filter for the Spring Filter chain
+     * @param request - Rest Request
+     * @param response - Rest Response
+     * @param filterChain - Filter Chain for authorization
+     * @throws ServletException - Servlet Exception
+     * @throws IOException - IO Exception
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
@@ -38,6 +62,7 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = null;
         final String requestPath = request.getRequestURI();
 
+        // Overrides the filter chain
         for (String publicPath : PUBLIC_PATHS) {
             if (requestPath.startsWith(publicPath)) {
                 filterChain.doFilter(request, response);
@@ -45,11 +70,13 @@ public class JwtFilter extends OncePerRequestFilter {
             }
         }
 
+        // Gets the JWT
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
             username = jwtService.extractEmail(token);
         }
 
+        // Updates the Filter chain
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = context.getBean(CustomUserDetailsService.class).loadUserByUsername(username);
             if (jwtService.validateToken(token, userDetails)) {
@@ -61,4 +88,8 @@ public class JwtFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
+
+    //------------------------------------------------------------------------------------
+    // END OF METHODS
+    //------------------------------------------------------------------------------------
 }

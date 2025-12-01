@@ -2,9 +2,19 @@ package dev.jcclair.PetFinderTest.models;
 
 import jakarta.persistence.*;
 
+/**
+ * User Entity for RDS
+ *
+ * @author Jason Clair
+ */
 @Entity
 @Table(name = "users")
 public class UserEntity {
+
+    //------------------------------------------------------------------------------------
+    // START OF PROPERTIES
+    //------------------------------------------------------------------------------------
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -16,9 +26,25 @@ public class UserEntity {
     private String password;
     private String phone;
 
+    //------------------------------------------------------------------------------------
+    // END OF PROPERTIES - START OF CONSTRUCTORS
+    //------------------------------------------------------------------------------------
+
+    /**
+     * Default CTOR
+     */
     public UserEntity() {
     }
 
+    /**
+     * Overlaoded CTOR
+     * @param id - ID of User
+     * @param fName - First name
+     * @param lName - Last Name
+     * @param email - Users Email
+     * @param password - Hashed Password
+     * @param phone - Phone number
+     */
     public UserEntity(long id, String fName, String lName, String email, String password, String phone) {
         this.id = id;
         this.fName = fName;
@@ -27,6 +53,10 @@ public class UserEntity {
         this.password = password;
         this.phone = phone;
     }
+
+    //------------------------------------------------------------------------------------
+    // END OF CONSTRUCTORS - START OF METHODS
+    //------------------------------------------------------------------------------------
 
     public long getId() {
         return id;
@@ -75,4 +105,7 @@ public class UserEntity {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+    //------------------------------------------------------------------------------------
+    // END METHODS
+    //------------------------------------------------------------------------------------
 }

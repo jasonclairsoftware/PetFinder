@@ -1,5 +1,10 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import * as L from 'leaflet';
+import { Petservice } from '../../services/petservice';
+import { Userservice } from '../../services/userservice';
+import { Pet } from '../../models/pet';
+import { Observable } from 'rxjs';
+import { UserModel } from '../../models/user-model';
 
 @Component({
   selector: 'app-map',
@@ -7,9 +12,17 @@ import * as L from 'leaflet';
   templateUrl: './map.html',
   styleUrl: './map.scss'
 })
-export class Map {
+export class Map implements AfterViewInit {
+  // Properties
   private map!: L.Map;
+  private pets: Pet[] = [];
+  private petMarkers: L.Marker[] = [];
+  loggedUser$!: Observable<UserModel | null>;
 
+  // CTOR
+  constructor(private petService: Petservice, private userService: Userservice) { }
+
+  // Methods
   private initMap(): void {
 
     this.map = L.map('map', {
@@ -29,7 +42,51 @@ export class Map {
   }
 
   ngAfterViewInit(): void {
+    this.loggedUser$ = this.userService.loggedUser$;
     this.initMap();
+    this.fetchPetsAndPlaceMarkers();
+  }
+
+  private fetchPetsAndPlaceMarkers() {
+    this.petService.getAllPets().subscribe({
+      next: (pets: Pet[]) => {
+        this.pets = pets;
+
+        this.pets.forEach(pet => {
+          this.addPetMarker(pet);
+        });
+
+      },
+      error: (err) => {
+        console.error('Error fetching pets:', err);
+      }
+    });
+  }
+
+  private addPetMarker(pet: Pet) {
+    const petIcon = L.icon({
+      iconUrl: pet.imageUrl || 'default-pet-icon.png',
+      iconSize: [40, 40],
+      iconAnchor: [20, 40],
+      popupAnchor: [0, -35]
+    });
+
+    let phone: string = '';
+    this.userService.getUserById(pet.ownerId).subscribe({
+      next: (response) => {
+        phone = response.phone;
+        const coords = pet.location.split(',').map(s => parseFloat(s.trim()));
+        const marker = L.marker([coords[0], coords[1]], { icon: petIcon })
+          .addTo(this.map)
+          .bindPopup(`<b>${pet.name}</b><br>Contact: ${phone}`);
+
+        this.petMarkers.push(marker);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+
   }
 
   private locateUser(): void {
@@ -40,19 +97,10 @@ export class Map {
   }
 
   private onLocationFound(e: L.LocationEvent): void {
-    const radius = e.accuracy / 2;
 
-    const myIcon = L.icon({
-      iconUrl: 'Yuri.png',
-      iconSize: [40, 40],
-      iconAnchor: [10, 20],
-      popupAnchor: [0, -20]
-    });
-
-    L.marker(e.latlng, { icon: myIcon })
-        .addTo(this.map)
-        .bindPopup(`Yuri: (602)867-2345`);
-
+    L.circle(e.latlng, { radius: e.accuracy / 2 }).addTo(this.map);
+    L.marker(e.latlng).addTo(this.map)
+      .bindPopup("You are here").openPopup();
   }
 
   private onLocationError(e: L.ErrorEvent): void {

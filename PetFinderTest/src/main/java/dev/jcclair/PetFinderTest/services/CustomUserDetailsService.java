@@ -13,12 +13,23 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The custom details service
+ *
+ * @author Jason Clair
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserDao userDao;
 
+    /**
+     * Loads the user for authentication
+     * @param username - Username ie email to find
+     * @return - UserDetails
+     * @throws UsernameNotFoundException - Exception
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userDao.findByEmail(username);
